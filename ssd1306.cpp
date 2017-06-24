@@ -260,6 +260,24 @@ void SSD1306::print_string(uint8_t col, uint8_t page, const char str[]) {
     print(str);
 }
 
+void SSD1306::print_float(float f, uint8_t space) {
+  uint8_t space_used = 4; // '0.00' used 4 space
+  float tmp = f;
+  if (tmp < 0.0F) {
+    space_used++;
+    tmp *= -1.0F;
+  }
+  while (tmp > 10.0F) {
+    space_used++;
+    tmp /= 10.0F;
+  }
+  while (space > space_used) {
+    space_used++;
+    print(' ');
+  }
+  print(f);
+}
+
 void SSD1306::off(void)
 {
   ssd1306_send_command(0xAE);

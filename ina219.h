@@ -16,10 +16,14 @@
  * Configuration Register (address = 00h)
  * Data Sheet Page 19 Table 3
  * Bit     13: Bus Voltage Range, 0 = 16V FSR
- * Bits 11-12: PGA (Shunt Voltage Only), 11 = +-320 mV, largest measurable current range
- * Bits  7-10: Bus ADC Resolution, 1000 = 12 bit, 532 us
- * Bits  3- 6: Shunt ADC Resolution, 1000 = 12 bit, 532 us
- * Bits  0- 2: Operating Mode, Shunt and bus, continuous
+ * Bits 12-11: PGA (Shunt Voltage Only)
+ *             00: +- 40 mV, Highest current resolution
+ *             01: +- 80 mV
+ *             10: +-160 mV
+ *             11: +-320 mV, largest measurable current range
+ * Bits 10- 7: Bus ADC Resolution, 1111 = 128 samples, 68.10 ms
+ * Bits  6- 3: Shunt ADC Resolution, 1111 = 128 samples, 68.10 ms
+ * Bits  2- 0: Operating Mode, Shunt and bus, continuous
  */
 #define CONFIG_REGISTER_ADDR 0x00
 #define CONFIG_UPPER 0b00000100
@@ -52,7 +56,7 @@
 /*
  * Calibration Register (address = 05h)
  * Data Sheet Page 12 Chapter 8.5.1, Page 25 Figure 27
- * Maximum Expected Current 800 mA (2N2222 max current)
+ * Maximum Expected Current 800 mA
  * Current_LSB = 800 mA / 2^15 ~= 25.6 uA
  * R(SHUNT) = 0.1 Ohm
  * Cal = 0.04096 / 0.0000256 / 0.1 = 16000 (0x3E80)
@@ -66,9 +70,11 @@
 /*
  * Conversion Time
  * Data Sheet Page 20 Table 5
- * 12 bit Mode require 532 us
  */
-#define CONVERSION_TIME 532
+//#define WAIT_CONVERSION delayMicroseconds(532) // 12 bit triggered Mode require 532 us
+//#define WAIT_CONVERSION delay(69) // 128 samples Mode triggered require 68.10 ms
+#define WAIT_CONVERSION delayMicroseconds(1) // no need to wait conversion in continuous mode
+
 
 class INA219 {
  public:

@@ -65,6 +65,7 @@ class SSD1306 : public Print {
     void draw_pattern(uint8_t width, uint8_t pattern);
     void draw_pattern(uint8_t set_col, uint8_t set_page, uint8_t width, uint8_t height, uint8_t pattern);
     void print_string(uint8_t set_col, uint8_t set_page, const char str[]);
+    void print_float(float number, uint8_t space);
 
     void off();
     void on();

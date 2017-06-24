@@ -27,6 +27,14 @@ void setup() {
   power_mon.begin();
 
   oled.fill(0x00); // clear in black
+  oled.set_pos(128 - 5, 0);
+  oled.print("V");
+  oled.set_pos(128 - 10, 2);
+  oled.print("mA");
+  oled.set_pos(128 - 15, 4);
+  oled.print("mWh");
+  oled.set_pos(CHART_RIGHT, 6);
+  oled.print("Time:");
 
 /* figure labels, comment out to reduce distraction
   oled.set_pos(CHART_RIGHT, 0);
@@ -49,18 +57,14 @@ void loop() {
   last_millis = millis();
 
   // print figures
-  oled.set_pos(CHART_RIGHT, 1);
-  oled.print(voltage);
-  oled.print(" V ");
-  oled.set_pos(CHART_RIGHT, 3);
-  oled.print(current);
-  oled.print(" mA ");
-  oled.set_pos(CHART_RIGHT, 5);
-  oled.print(last_millis / 1000);
-  oled.print(" sec");
+  oled.set_pos(CHART_RIGHT, 0);
+  oled.print_float(voltage, 8);
+  oled.set_pos(CHART_RIGHT, 2);
+  oled.print_float(current, 7);
+  oled.set_pos(CHART_RIGHT, 4);
+  oled.print_float(mWh, 6);
   oled.set_pos(CHART_RIGHT, 7);
-  oled.print(mWh);
-  oled.print(" mWh");
+  oled.print(last_millis / 1000);
 
   // auto adjust graph ceiling
   if (voltage >= max_v) max_v = voltage + CEILING_BUFFER;

@@ -19,7 +19,9 @@ uint16_t read_register(uint8_t reg_addr) {
   TinyWireM.beginTransmission(INA219_I2C_ADDR);
   TinyWireM.send(reg_addr);
   TinyWireM.endTransmission();
-  delayMicroseconds(CONVERSION_TIME); // wait conversion time
+#ifdef WAIT_CONVERSION
+  WAIT_CONVERSION; // wait conversion time
+#endif
   TinyWireM.requestFrom(INA219_I2C_ADDR, 2);
   return ((TinyWireM.read() << 8) | TinyWireM.read());
 }

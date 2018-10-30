@@ -12,6 +12,8 @@
  */
 #define INA219_I2C_ADDR 0b1000000
 
+#define DETECT_HIGH_CURRENT_THRESHOLD 360 // 90% of 400 mA
+
 /*
  * Configuration Register (address = 00h)
  * Data Sheet Page 19 Table 3
@@ -27,6 +29,7 @@
  */
 #define CONFIG_REGISTER_ADDR 0x00
 #define CONFIG_UPPER 0b00000100
+#define CONFIG_UPPER_3A 0b00011100
 #define CONFIG_LOWER 0b01000111
 
 /*
@@ -57,15 +60,22 @@
  * Calibration Register (address = 05h)
  * Data Sheet Page 12 Chapter 8.5.1, Page 25 Figure 27
  * Maximum Expected Current 800 mA
- * Current_LSB = 800 mA / 2^15 ~= 25.6 uA
+ * Current_LSB = 400 mA / 2^15 ~= 12.8 uA
  * R(SHUNT) = 0.1 Ohm
- * Cal = 0.04096 / 0.0000256 / 0.1 = 16000 (0x3E80)
+ * Cal = 0.04096 / 0.0000128 / 0.1 = 32000 (0x7D00)
+ * Maximum Expected Current 3200 mA
+ * Current_LSB = 3200 mA / 2^15 ~= 102.4 uA
+ * R(SHUNT) = 0.1 Ohm
+ * Cal = 0.04096 / 0.0001024 / 0.1 = 4000 (0x0FA0)
  */
 #define CALIBRATION_REGISTER_ADDR 0x05
-#define CALIBRATION_UPPER 0x3E
-#define CALIBRATION_LOWER 0x80
-#define CURRENT_LSB 0.0256
-#define POWER_LSB 20 * CURRENT_LSB
+#define CALIBRATION_UPPER 0x7D
+#define CALIBRATION_LOWER 0x00
+#define CURRENT_LSB 0.0128
+#define CALIBRATION_UPPER_3A 0x0F
+#define CALIBRATION_LOWER_3A 0xA0
+#define CURRENT_LSB_3A 0.1024
+#define POWER_CONSTANT 20
 
 /*
  * Conversion Time
@@ -75,11 +85,13 @@
 //#define WAIT_CONVERSION delay(69) // 128 samples Mode triggered require 68.10 ms
 #define WAIT_CONVERSION delayMicroseconds(1) // no need to wait conversion in continuous mode
 
-
-class INA219 {
- public:
+class INA219
+{
+public:
   INA219(void);
   void begin(void);
+  void to_high_value_mode(void);
+  bool is_high_value_mode(void);  
   float read_shunt_voltage(void);
   float read_bus_voltage(void);
   float read_power(void);
@@ -87,4 +99,3 @@ class INA219 {
 };
 
 #endif //INA219_H
-

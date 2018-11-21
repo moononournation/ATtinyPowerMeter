@@ -8,7 +8,7 @@ INA219 power_mon;
 
 #define CEILING_BUFFER 0.1F
 #define CHART_LEFT 0
-#define CHART_RIGHT 78
+#define CHART_RIGHT 75
 
 static uint8_t i = CHART_LEFT;
 static float voltage = 0;
@@ -58,11 +58,11 @@ void loop() {
 
   // print figures
   oled.set_pos(CHART_RIGHT, 0);
-  oled.print_float(voltage, 8);
+  oled.print_float(voltage, 9);
   oled.set_pos(CHART_RIGHT, 2);
-  oled.print_float(current, 7);
+  oled.print_float(current, 8);
   oled.set_pos(CHART_RIGHT, 4);
-  oled.print_float(mWh, 6);
+  oled.print_float(mWh, 7);
   oled.set_pos(CHART_RIGHT, 7);
   oled.print(last_millis / 1000);
 
@@ -85,4 +85,3 @@ void loop() {
   // draw current position line
   oled.draw_pattern(i, 0, 1, 8, 0xFF);
 }
-

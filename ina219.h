@@ -29,7 +29,7 @@
  */
 #define CONFIG_REGISTER_ADDR 0x00
 #define CONFIG_UPPER 0b00000100
-#define CONFIG_UPPER_3A 0b00011100
+#define CONFIG_UPPER_3A 0b00111100
 #define CONFIG_LOWER 0b01000111
 
 /*
@@ -91,7 +91,7 @@ public:
   INA219(void);
   void begin(void);
   void to_high_value_mode(void);
-  bool is_high_value_mode(void);  
+  bool is_high_value_mode(void);
   float read_shunt_voltage(void);
   float read_bus_voltage(void);
   float read_power(void);

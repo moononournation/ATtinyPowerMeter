@@ -11,7 +11,7 @@
  * Software Configuration, data sheet page 64
  */
 
-static const uint8_t ssd1306_configuration[] PROGMEM = {
+static const uint8_t ssd1306_configuration[] /* PROGMEM */ = {
 
 #ifdef SCREEN_128X64
   0xA8, 0x3F,   // Set MUX Ratio, 0F-3F
@@ -43,7 +43,8 @@ SSD1306::SSD1306(void) {}
 void SSD1306::begin(void)
 {
   for (uint8_t i = 0; i < sizeof (ssd1306_configuration); i++) {
-    ssd1306_send_command(pgm_read_byte_near(&ssd1306_configuration[i]));
+//    ssd1306_send_command(pgm_read_byte_near(&ssd1306_configuration[i]));
+    ssd1306_send_command(ssd1306_configuration[i]);
   }
 }
 
@@ -148,7 +149,7 @@ void SSD1306::plot_area(uint8_t col, uint8_t page, uint8_t page_range, float val
   uint8_t plot_range = page_range * 8;
   uint8_t plot_value = plot_range * ((value < lower_bound) ? 0 : ((value >= upper_bound) ? 0.99F : (value - lower_bound) / (upper_bound - lower_bound)));
   uint8_t plot_page = plot_value / 8;
-  uint8_t plot_data = 0b11111111 << (8 - (plot_value - (plot_page * 8)));
+  uint8_t plot_data = 0b11111111 << (8 - (plot_value - (plot_page << 3)));
   uint8_t data;
   set_area(col, page, 0, page_range - 1);
   ssd1306_send_data_start();

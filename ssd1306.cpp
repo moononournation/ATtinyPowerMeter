@@ -30,7 +30,7 @@ static const uint8_t ssd1306_configuration[] /* PROGMEM */ = {
   0xDA, 0x12,   // Set Com Pins hardware configuration, Alternative
 #endif
 
-  0x81, 0x01,   // Set Contrast Control, 01-FF
+  0x81, 0x3F,   // Set Contrast Control, 01-FF
   0xA4,         // Disable Entire Display On, 0xA4=Output follows RAM content; 0xA5,Output ignores RAM content
   0xA6,         // Set Display Mode. A6=Normal; A7=Inverse
   0xD5, 0x80,   // Set Osc Frequency
@@ -265,7 +265,7 @@ void SSD1306::print_float(float f, uint8_t space) {
   uint8_t digit_left = space - 2; // '0.' used 2 space
   float tmp = f;
   if (tmp < 0.0F) {
-    digit_left--;
+    digit_left--; // minus sign
     tmp *= -1.0F;
   }
   while ((tmp > 10.0F) || (digit_left == 0)) {

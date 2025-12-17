@@ -264,14 +264,21 @@ void SSD1306::print_string(uint8_t col, uint8_t page, const char str[]) {
 void SSD1306::print_float(float f, uint8_t space) {
   uint8_t digit_left = space - 2; // '0.' used 2 space
   float tmp = f;
+
+  // digit for minus sign
   if (tmp < 0.0F) {
-    digit_left--; // minus sign
     tmp *= -1.0F;
+  } else {
+    print(' ');
   }
+  digit_left--;
+
+  // calculate print digits
   while ((tmp > 10.0F) || (digit_left == 0)) {
     digit_left--;
     tmp /= 10.0F;
   }
+
   print(f, digit_left);
 }
 

@@ -17,15 +17,35 @@
 /*
  * Configuration Register (address = 00h)
  * Data Sheet Page 19 Table 3
- * Bit     13: Bus Voltage Range, 0 = 16V FSR
+ * Bit     13: Bus Voltage Range, 0 = 16V FSR, 1 = 32V FSR (default value)
  * Bits 12-11: PGA (Shunt Voltage Only)
  *             00: +- 40 mV, Highest current resolution
  *             01: +- 80 mV
  *             10: +-160 mV
  *             11: +-320 mV, largest measurable current range
- * Bits 10- 7: Bus ADC Resolution, 1111 = 128 samples, 68.10 ms
- * Bits  6- 3: Shunt ADC Resolution, 1111 = 128 samples, 68.10 ms
- * Bits  2- 0: Operating Mode, Shunt and bus, continuous
+ * Bits 10- 7: Bus ADC Resolution, same as Shunt ADC
+ * Bits  6- 3: Shunt ADC Resolution
+ *             0X00: 9 bit 84 μs
+ *             0X01: 10 bit 148 μs
+ *             0X10: 11 bit 276 μs
+ *             0X11: 12 bit 532 μs
+ *             1000: 12 bit 532 μs
+ *             1001: 2 samples, 1.06 ms
+ *             1010: 4 samples, 2.13 ms
+ *             1011: 8 samples, 4.26 ms
+ *             1100: 16 samples, 8.51 ms
+ *             1101: 32 samples, 17.02 ms
+ *             1110: 64 samples, 34.05 ms
+ *             1111: 128 samples, 68.10 ms
+ * Bits  2- 0: Operating Mode
+ *             000: Power-down
+ *             001: Shunt voltage, triggered
+ *             010: Bus voltage, triggered
+ *             011: Shunt and bus, triggered
+ *             100: ADC off (disabled)
+ *             101: Shunt voltage, continuous
+ *             110: Bus voltage, continuous
+ *             111: Shunt and bus, continuous
  */
 #define CONFIG_REGISTER_ADDR 0x00
 #define CONFIG_UPPER 0b00000100
@@ -81,9 +101,9 @@
  * Conversion Time
  * Data Sheet Page 20 Table 5
  */
-//#define WAIT_CONVERSION delayMicroseconds(532) // 12 bit triggered Mode require 532 us
-//#define WAIT_CONVERSION delay(69) // 128 samples Mode triggered require 68.10 ms
-#define WAIT_CONVERSION delayMicroseconds(1) // no need to wait conversion in continuous mode
+// #define WAIT_CONVERSION delayMicroseconds(532) // 12 bit triggered Mode require 532 us
+// #define WAIT_CONVERSION delay(69) // 128 samples Mode triggered require 68.10 ms
+#define WAIT_CONVERSION // no need to wait conversion in continuous mode
 
 class INA219
 {

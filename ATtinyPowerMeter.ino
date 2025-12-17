@@ -18,8 +18,8 @@ static float mWh = 0.0F;
 static float last_second = 0.0F;
 
 static float max_v = 5.0F;
-static float max_ma = 10.0F;
-static float max_mw = 5.0F;
+static float max_ma = 2.0F;
+static float max_mw = 10.0F;
 
 void setup()
 {
@@ -86,6 +86,18 @@ void loop()
   if (i >= CHART_RIGHT)
   {
     i = CHART_LEFT;
+    max_v = voltage * 2.0F;
+    if (max_v < 5.0F) {
+      max_v = 5.0F;
+    }
+    max_ma = current * 2.0F;
+    if (max_ma < 2.0F) {
+      max_ma = 2.0F;
+    }
+    max_mw = power * 2.0F;
+    if (max_mw < 10.0F) {
+      max_mw = 10.0F;
+    }
   }
 
   // draw current position line
